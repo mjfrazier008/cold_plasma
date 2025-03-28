@@ -25,8 +25,8 @@ kmax: Maximum value of $k_x/k_y$.
 
 Nk: Number of linearly spaced points between kmin and kmax to diagonalize $H_I$ at. 
 
-## spectrum.m:
-Diagonalizes edge Hamiltonian for only transverse magnetic Hamiltonian ($k_z = 0$). 
+## spectrum_5.m:
+Diagonalizes edge Hamiltonian for only 5x5 transverse magnetic Hamiltonian ($k_z = 0$). 
 
 ## discH_...  :
 Functions which generate discretized interface Hamiltonians for diagonalization.
