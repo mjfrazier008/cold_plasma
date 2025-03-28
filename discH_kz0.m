@@ -2,9 +2,13 @@ function H = discH_kz0(ky, op, N, L)
     dx = 2*L/N;
     c = floor(0.1*N);
     x = linspace(-L, L, N);
+
+    % Defines how Om varies, change this line if desired:
     Omx = 1 - 2./(1+exp(-x));
     % Omx = heaviside(x)-0.5;
     % Omx = linspace(0.5, -0.5, N);
+
+    % Ensures periodic boundary conditions:
     Om1 = Omx(c) + (Omx(N-c)-Omx(c))./(1+exp(3*linspace(-L, L, 2*c)));
     Omx(1:c) = Om1(c+1:2*c);
     Omx(N-c+1:N) = Om1(1:c);

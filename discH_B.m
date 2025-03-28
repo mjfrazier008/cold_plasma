@@ -2,27 +2,33 @@ function H = discH_B(ky, kz, op, N, L)
     dx = 2*L/N;
     c = floor(0.1*N);
     x = linspace(-L, L, N);
-    periodic = true;
+
+    % Critical values of Om:
     if op < kz
         Om0= op/(1-(op/kz)^2);
     else
         Om0 = op/((op/kz)^2-1);
     end
+
+    % Defines how Om varies, change this line if desired:
     Omx =  0.75*Om0- 1.5*Om0./(1+exp(-x));
     % Omx = 1.2*Om0 - 0.4*Om0./(1+exp(-2*x));
     % Omx = linspace(-1.2*Om0, 1.2*Om0, N);
     % Omx = (heaviside(x)-1/2)*2.2*Om0;
-    if periodic == true
-        % opp1 = Omx(c)*exp(-x(c))/(1+ exp(-x(c)));
-        % opp2 = Omx(N-c)*exp(-x(N-c))/(1+ exp(-x(N-c)));
-        % x1 = linspace(x(N-c), L+(L-x(N-c)), 2*c);
-        % p = spline([x1(1), x1(2*c)], [opp2 [Omx(N-c), Omx(c)] opp1]);
-        % Omx(1:c) = ppval(p, x1(c+1:2*c));
-        % Omx(N-c+1:N) = ppval(p, x1(1:c));
-        Om1 = Omx(c) + (Omx(N-c)-Omx(c))./(1+exp(2*linspace(-L, L, 2*c)));
-        Omx(1:c) = Om1(c+1:2*c);
-        Omx(N-c+1:N) = Om1(1:c);
-    end
+    
+    % Enforces peroidic boundary conditions:
+
+    % opp1 = Omx(c)*exp(-x(c))/(1+ exp(-x(c)));
+    % opp2 = Omx(N-c)*exp(-x(N-c))/(1+ exp(-x(N-c)));
+    % x1 = linspace(x(N-c), L+(L-x(N-c)), 2*c);
+    % p = spline([x1(1), x1(2*c)], [opp2 [Omx(N-c), Omx(c)] opp1]);
+    % Omx(1:c) = ppval(p, x1(c+1:2*c));
+    % Omx(N-c+1:N) = ppval(p, x1(1:c));
+    Om1 = Omx(c) + (Omx(N-c)-Omx(c))./(1+exp(2*linspace(-L, L, 2*c)));
+    Omx(1:c) = Om1(c+1:2*c);
+    Omx(N-c+1:N) = Om1(1:c);
+
+    % Build H:
     kcr1 = [0, -kz/2, ky/2; kz/2, 0, -1j/dx; -ky/2, 1j/dx, 0];
     kcr2 = [0, kz/2, -ky/2; -kz/2, 0, -1j/dx; ky/2, 1j/dx, 0];
     kcr3 = [0, -kz/2, ky/2; kz/2, 0, 1j/dx; -ky/2, -1j/dx, 0];

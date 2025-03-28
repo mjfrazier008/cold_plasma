@@ -1,11 +1,18 @@
 function H = discH_TCLW(ky, kz, Om, N, L)
+
+    % To experiment with clamped boundary conditions change to false 
+    % (warning: not Hermitian and will take longer to diagonalize):
     periodic = true;
+
     dx = 2*L/N;
     c = floor(0.1*N);
     op0 = abs(Om)/2*(sqrt((kz/Om)^4 + 4*(kz/Om)^2)-(kz/Om)^2);
     x = linspace(-L, L, N);
+
+    % Defines how op varies, change this line if desired:
     %opx = linspace(0, 2*op0, N);
     opx = 1.5*op0 - op0./(1+exp(-x));
+    
     if periodic == true
         %opp1 = opx(c)*exp(-x(c))/(1+ exp(-x(c)));
         %opp2 = opx(N-c)*exp(-x(N-c))/(1+ exp(-x(N-c)));

@@ -1,19 +1,28 @@
 function H = discH_both(ky, kz, op, N, L)
     dx = 2*L/N;
-    periodic = true;
     c = floor(0.1*N);
     x = linspace(-L, L, N);
+
+    % To experiment with clamped boundary conditions change to false 
+    % (warning: not Hermitian and will take longer to diagonalize):
+    periodic = true;
+
+    % Critical values of Om:
     if op < kz
         Om0= op/(1-(op/kz)^2);
     else
         Om0 = op/((op/kz)^2-1);
     end
+
+    % Define how Om and op vary:
     Omx =  -1.2*Om0+ 2.4*Om0./(1+exp(-2*x));
     % Omx = linspace(-1.2*Om0, 1.2*Om0, N);
     opx = op*(1-(Omx./(1.2*Om0)).^2);
     % opx = op*(Omx/(1.2*Om0)).^2;
     % Omx = linspace(-1.2*Om0, 1.2*Om0, N);
     % Omx = (heaviside(x)-1/2)*2.2*Om0;
+
+    
     Om1 = Omx(c) + (Omx(N-c)-Omx(c))./(1+exp(linspace(-L, L, 2*c)));
     Omx(1:c) = Om1(c+1:2*c);
     Omx(N-c+1:N) = Om1(1:c);

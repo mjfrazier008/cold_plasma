@@ -1,16 +1,16 @@
+%% Identical to spectrum.m but only for 5x5 transverse magnetic modes (kz = 0)
+
 neigs = 100;
-Om = 1;
-kz = 0;
-op = 1;
-op0minus = abs(Om)/2*(sqrt((kz/Om)^4 + 4*(kz/Om)^2)-(kz/Om)^2);
-op0plus =  abs(Om)/2*(sqrt((kz/Om)^4 + 4*(kz/Om)^2)+(kz/Om)^2);
 L = 15;
+eigcenter = L*0.55;
+Om = 1;
+op = 1;
 N = 2000;
 Nk = 150;
 c = floor(.1*N);
-periodic = true;
 kleft = -1.5;
 kright = 1.5;
+
 xk = linspace(kleft, kright, Nk);
 E1 = zeros([Nk, neigs]);
 E2 = zeros(size(E1));
@@ -26,8 +26,7 @@ Z = repmat(z, 1, N);
 parfor n = 1:Nk
     ky = xk(n);
     H = sparse(discH_kz0(ky, op, N, L));
-    [v, e] = eigs(L*H, neigs, L*0.55);
-    %if periodic == false
+    [v, e] = eigs(L*H, neigs, eigcenter);
         e = diag(e);
         for m = 1:neigs
             A = abs(v(:, m));
@@ -50,17 +49,8 @@ parfor n = 1:Nk
                 E5(n, m) = e(m);
             end
         end
-    % else
-    %     e = abs(diag(e));
-    %     for m = 1:neigs
-    %         if norm(v(1:9*c, m))^2 + norm(v(9*(N-c):9*N, m))^2 > .5*norm(v(:, m))^2
-    %             E1((n-1)*neigs + m) = e(m);
-    %         else
-    %             E2((n-1)*neigs + m) = e(m);
-    %         end
-    %     end
-    % end
 end
+
 %% 
 
 x1 = zeros([1, Nk*neigs]);
